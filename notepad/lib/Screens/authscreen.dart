@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/responsive.dart';
+import 'package:notepad/taost_utils.dart';
 import 'signUpscreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -13,6 +15,8 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formkey = GlobalKey<FormState>();
   final emailcontroller = TextEditingController();
   final passcontroller = TextEditingController();
+  bool loading = false;
+  final _auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,8 +48,10 @@ class _AuthScreenState extends State<AuthScreen> {
                         right: getwidth(context) * 0.05),
                     child: TextFormField(
                       validator: (value) {
-                        if (value!.isEmpty || !value.contains('@')) {
-                          return 'Invalid Email address';
+                        if (value!.isEmpty) {
+                          return 'Field required';
+                        } else if (!value.contains('@')) {
+                          return 'Invalid email format';
                         }
                         return null;
                       },
@@ -54,6 +60,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       cursorColor: Colors.white,
                       key: ValueKey('Email'),
                       decoration: InputDecoration(
+                          errorStyle: TextStyle(color: Colors.white),
                           border: OutlineInputBorder(borderSide: BorderSide()),
                           label: Text(
                             "Email Address",
@@ -77,12 +84,19 @@ class _AuthScreenState extends State<AuthScreen> {
                         left: getwidth(context) * 0.05,
                         right: getwidth(context) * 0.05),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Field required';
+                        }
+                        return null;
+                      },
                       style: TextStyle(color: Colors.white),
                       controller: passcontroller,
                       cursorColor: Colors.white,
                       obscureText: true,
                       key: ValueKey('Password'),
                       decoration: InputDecoration(
+                          errorStyle: TextStyle(color: Colors.white),
                           border: OutlineInputBorder(
                               borderSide: BorderSide(),
                               borderRadius: BorderRadius.circular(10)),
@@ -103,20 +117,54 @@ class _AuthScreenState extends State<AuthScreen> {
                   SizedBox(
                     height: getheight(context) * 0.03,
                   ),
-                  Container(
-                    height: getheight(context) * 0.06,
-                    width: getwidth(context) * 0.8,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18)),
-                    child: Center(
-                        child: Text(
-                      "Login",
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    )),
+                  InkWell(
+                    onTap: () async {
+                      setState(() {
+                        loading = true;
+                      });
+                      if (_formkey.currentState!.validate()) {
+                        _auth
+                            .signInWithEmailAndPassword(
+                                email: emailcontroller.text.toString(),
+                                password: passcontroller.text.toString())
+                            .then((value) {
+                          setState(() {
+                            loading = false;
+                            toastMessage("Welcome Back <3");
+                            emailcontroller.clear();
+                            passcontroller.clear();
+                          });
+                        }).onError((error, stackTrace) {
+                          setState(() {
+                            loading = false;
+                            toastMessage(error.toString());
+                          });
+                        });
+                      } else {
+                        setState(() {
+                          loading = false;
+                        });
+                      }
+                    },
+                    child: Container(
+                      height: getheight(context) * 0.06,
+                      width: getwidth(context) * 0.8,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18)),
+                      child: Center(
+                          child: loading
+                              ? CircularProgressIndicator(
+                                  color: Colors.red,
+                                )
+                              : Text(
+                                  "Login",
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )),
+                    ),
                   ),
                   SizedBox(
                     height: getheight(context) * 0.01,
