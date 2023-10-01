@@ -1,18 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:notepad/responsive.dart';
-import 'signUpscreen.dart';
+import 'dart:html';
 
-class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+import 'package:flutter/material.dart';
+import 'package:notepad/Screens/authscreen.dart';
+import 'package:notepad/responsive.dart';
+import 'authscreen.dart';
+
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<AuthScreen> createState() => _AuthScreenState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _SignUpState extends State<SignUp> {
   final _formkey = GlobalKey<FormState>();
   final emailcontroller = TextEditingController();
   final passcontroller = TextEditingController();
+  final nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -37,6 +41,36 @@ class _AuthScreenState extends State<AuthScreen> {
                   ),
                   SizedBox(
                     height: getheight(context) * 0.1,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        left: getwidth(context) * 0.05,
+                        right: getwidth(context) * 0.05),
+                    child: TextFormField(
+                      style: TextStyle(color: Colors.white),
+                      controller: nameController,
+                      cursorColor: Colors.white,
+                      key: ValueKey('Username'),
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(),
+                              borderRadius: BorderRadius.circular(10)),
+                          label: Text(
+                            "Username",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          hintText: "Tudora",
+                          hintStyle: TextStyle(color: Colors.white),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15)),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(15))),
+                    ),
+                  ),
+                  SizedBox(
+                    height: getheight(context) * 0.02,
                   ),
                   Padding(
                     padding: EdgeInsets.only(
@@ -77,6 +111,14 @@ class _AuthScreenState extends State<AuthScreen> {
                         left: getwidth(context) * 0.05,
                         right: getwidth(context) * 0.05),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Field is required';
+                        } else if (value.length < 8) {
+                          return 'Password length must be minimum 8 characters';
+                        }
+                        return null;
+                      },
                       style: TextStyle(color: Colors.white),
                       controller: passcontroller,
                       cursorColor: Colors.white,
@@ -103,20 +145,23 @@ class _AuthScreenState extends State<AuthScreen> {
                   SizedBox(
                     height: getheight(context) * 0.03,
                   ),
-                  Container(
-                    height: getheight(context) * 0.06,
-                    width: getwidth(context) * 0.8,
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(18)),
-                    child: Center(
-                        child: Text(
-                      "Login",
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    )),
+                  InkWell(
+                    onTap: () {},
+                    child: Container(
+                      height: getheight(context) * 0.06,
+                      width: getwidth(context) * 0.8,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(18)),
+                      child: Center(
+                          child: Text(
+                        "Register",
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      )),
+                    ),
                   ),
                   SizedBox(
                     height: getheight(context) * 0.01,
@@ -125,7 +170,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account?",
+                        "Already have an account?",
                         style: TextStyle(color: Colors.white),
                       ),
                       TextButton(
@@ -133,10 +178,10 @@ class _AuthScreenState extends State<AuthScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => SignUp()));
+                                    builder: (context) => AuthScreen()));
                           },
                           child: Text(
-                            "SignUp",
+                            "Login",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold),
