@@ -12,14 +12,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(child: Text("Todura",style: TextStyle(color: Colors.white),)),
+        title: Center(
+            child: Text(
+          "Todura",
+          style: TextStyle(color: Colors.white),
+        )),
         elevation: 1.5,
         toolbarHeight: 70,
       ),
-      body: Container(
+      body: Container(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        elevation: 1.5,
+        child: Center(child: Icon(Icons.add)),
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){},
-      elevation: 1.5,child: Center(child: Icon(Icons.add)),),
     );
   }
 }
