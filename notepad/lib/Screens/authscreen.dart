@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:notepad/responsive.dart';
 import 'package:notepad/taost_utils.dart';
 import 'signUpscreen.dart';
+import 'homeScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -133,6 +134,10 @@ class _AuthScreenState extends State<AuthScreen> {
                             toastMessage("Welcome Back <3");
                             emailcontroller.clear();
                             passcontroller.clear();
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeScreen()));
                           });
                         }).onError((error, stackTrace) {
                           setState(() {
