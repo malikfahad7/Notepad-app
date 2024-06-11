@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:notepad/Screens/signUpscreen.dart';
-import 'Screens/home.dart';
 import 'Screens/authscreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
