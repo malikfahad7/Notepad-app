@@ -137,7 +137,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomeScreen()));
+                                    builder: (context) => HomeScreen(uid: _auth.currentUser!.uid)));
                           });
                         }).onError((error, stackTrace) {
                           setState(() {
